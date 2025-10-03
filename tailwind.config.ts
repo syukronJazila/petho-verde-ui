@@ -47,16 +47,16 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
-        },
+        'dark-green': 'hsl(var(--dark-green))',
+        'sage-green': 'hsl(var(--sage-green))',
+      },
+      boxShadow: {
+        'green': '0 4px 6px -1px hsl(var(--shadow-green)), 0 2px 4px -2px hsl(var(--shadow-green))',
+        'green-md': '0 10px 15px -3px hsl(var(--shadow-green-md)), 0 4px 6px -4px hsl(var(--shadow-green-md))',
+        'green-lg': '0 20px 25px -5px hsl(var(--shadow-green-lg)), 0 8px 10px -6px hsl(var(--shadow-green-lg))',
+      },
+      transitionProperty: {
+        'smooth': 'var(--transition-smooth)',
       },
       borderRadius: {
         lg: "var(--radius)",
