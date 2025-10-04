@@ -1,4 +1,4 @@
-import { MapPin, Phone, Mail, Clock, Facebook, Instagram, MessageCircle, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
@@ -8,26 +8,70 @@ const Contact = () => {
 
   const faqs = [
     {
-      question: 'Bagaimana cara memulai budidaya tanaman herbal?',
-      answer: 'Untuk pemula, kami merekomendasikan memulai dengan tanaman yang mudah dirawat seperti mint, basil, atau lidah buaya. Lihat panduan budidaya kami untuk instruksi lengkap.',
+      question: 'Apa tujuan utama dari website PETHOFAR?',
+      answer: 'PETHOFAR dibuat untuk membantu masyarakat mengenal berbagai jenis tanaman herbal, manfaatnya untuk kesehatan, dan cara penggunaannya dalam kehidupan sehari-hari secara sederhana dan mudah dipahami.',
     },
     {
-      question: 'Apakah PETHOFAR menjual bibit tanaman?',
-      answer: 'Saat ini kami fokus menyediakan informasi dan edukasi. Namun, kami dapat merekomendasikan penjual bibit terpercaya di area Anda.',
+      question: 'Apakah semua informasi di PETHOFAR bersifat medis?',
+      answer: 'Tidak. Informasi di PETHOFAR bersifat edukatif dan bertujuan memberikan wawasan umum tentang tanaman herbal. Untuk kebutuhan medis atau pengobatan tertentu, sebaiknya tetap berkonsultasi dengan tenaga kesehatan profesional.',
     },
     {
-      question: 'Bagaimana cara bergabung dengan komunitas?',
-      answer: 'Anda dapat bergabung dengan diskusi di forum kami atau mengikuti sosial media kami untuk update terbaru dan tips harian.',
+      question: 'Apakah saya bisa meminta rekomendasi tanaman untuk keluhan tertentu?',
+      answer: 'Kami tidak memberikan saran medis secara langsung, tetapi Anda dapat membaca artikel atau mengajukan pertanyaan melalui formulir kontak. Tim kami akan membantu mengarahkan ke artikel atau sumber bacaan yang relevan.',
     },
     {
-      question: 'Apakah konsultasi gratis?',
-      answer: 'Ya, Anda dapat bertanya melalui forum diskusi kami atau mengirim pertanyaan melalui formulir kontak. Tim kami akan merespons secepatnya.',
+      question: 'Bagaimana cara ikut berkontribusi di PETHOFAR?',
+      answer: 'Anda bisa mengirim ide tulisan, pengalaman pribadi, atau artikel seputar tanaman herbal melalui formulir kontak. Kami senang berbagi ruang dengan siapa pun yang peduli pada gaya hidup alami.',
     },
     {
-      question: 'Bagaimana cara berkontribusi artikel?',
-      answer: 'Kami menerima kontribusi artikel dari ahli herbal dan praktisi. Silakan hubungi kami melalui email dengan proposal artikel Anda.',
+      question: 'Apakah informasi di PETHOFAR dapat dibagikan ulang?',
+      answer: 'Tentu saja boleh, selama mencantumkan sumber dari PETHOFAR dan tidak digunakan untuk tujuan komersial. Kami mendukung penyebaran informasi bermanfaat tentang tanaman herbal secara terbuka.',
     },
   ];
+
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+    consent: false,
+  });
+
+  const [loading, setLoading] = useState(false);
+  const [responseMsg, setResponseMsg] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault(); // cegah reload halaman
+    setLoading(true);
+    setResponseMsg("");
+
+    const formData = new FormData();
+    formData.append("name", form.name);
+    formData.append("email", form.email);
+    formData.append("subject", form.subject);
+    formData.append("message", form.message);
+    if (form.consent) formData.append("consent", "1");
+
+    try {
+      const res = await fetch("http://localhost/pethofar/submitKontak.php", {
+        method: "POST",
+        body: formData,
+      });
+
+      const data = await res.json();
+
+      if (!res.ok || data.error) {
+        setResponseMsg(data.message || "Terjadi kesalahan!");
+      } else {
+        setResponseMsg(data.message || "Pesan berhasil dikirim!");
+        setForm({ name: "", email: "", subject: "", message: "", consent: false });
+      }
+    } catch (err) {
+      setResponseMsg("Terjadi kesalahan koneksi!");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -45,220 +89,115 @@ const Contact = () => {
 
       <div className="flex-1 py-16">
         <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 mb-16">
-            {/* Left Column: Contact Info */}
-            <div>
-              <h2 className="text-3xl font-bold mb-8">Informasi Kontak</h2>
-              
-              <div className="space-y-6 mb-8">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                    <MapPin className="h-6 w-6 text-secondary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Alamat</h3>
-                    <p className="text-muted-foreground">
-                      Jl. Raya Tanaman Herbal No. 123<br />
-                      Jakarta Selatan, DKI Jakarta 12345<br />
-                      Indonesia
-                    </p>
-                  </div>
+          {/* Form Section */}
+          <div className="flex justify-center mb-16">
+            <div className="w-full max-w-3xl bg-card rounded-2xl p-10 shadow-lg border border-border/50 relative z-10">
+              <h2 className="text-3xl font-bold mb-6 text-center text-foreground">Kirim Pesan</h2>
+              <p className="text-muted-foreground text-center mb-8">
+                Punya pertanyaan atau ingin berbagi pengalaman seputar tanaman herbal? Isi formulir di bawah dan kami akan segera merespons.
+              </p>
+
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium mb-2">
+                    Nama Lengkap <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    value={form.name}
+                    onChange={(e) => setForm({...form, name: e.target.value})}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
+                    placeholder="Masukkan nama lengkap"
+                  />
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                    <Phone className="h-6 w-6 text-secondary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Telepon</h3>
-                    <p className="text-muted-foreground">
-                      +62 812-3456-7890<br />
-                      +62 21-1234-5678
-                    </p>
-                  </div>
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium mb-2">
+                    Email <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    value={form.email}
+                    onChange={(e) => setForm({...form, email: e.target.value})}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
+                    placeholder="nama@email.com"
+                  />
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                    <Mail className="h-6 w-6 text-secondary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Email</h3>
-                    <p className="text-muted-foreground">
-                      info@pethofar.com<br />
-                      support@pethofar.com
-                    </p>
-                  </div>
+                <div>
+                  <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                    Subjek <span className="text-destructive">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    id="subject"
+                    name="subject"
+                    value={form.subject}
+                    onChange={(e) => setForm({...form, subject: e.target.value})}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
+                    placeholder="Topik pesan Anda"
+                  />
                 </div>
 
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-secondary/20 flex items-center justify-center flex-shrink-0">
-                    <Clock className="h-6 w-6 text-secondary" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold mb-1">Jam Operasional</h3>
-                    <p className="text-muted-foreground">
-                      Senin - Jumat: 09:00 - 17:00<br />
-                      Sabtu: 09:00 - 14:00<br />
-                      Minggu: Tutup
-                    </p>
-                  </div>
+                <div>
+                  <label htmlFor="message" className="block text-sm font-medium mb-2">
+                    Pesan <span className="text-destructive">*</span>
+                  </label>
+                  <textarea
+                    id="message"
+                    name="message"
+                    rows={5}
+                    value={form.message}
+                    onChange={(e) => setForm({...form, message: e.target.value})}
+                    required
+                    className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
+                    placeholder="Tulis pesan Anda di sini..."
+                  ></textarea>
                 </div>
-              </div>
 
-              <div className="bg-muted rounded-lg p-6">
-                <h3 className="font-semibold mb-4">Ikuti Kami</h3>
-                <div className="flex gap-4">
-                  <a 
-                    href="https://instagram.com" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center hover:bg-secondary/90 transition-smooth"
-                  >
-                    <Instagram className="h-5 w-5" />
-                  </a>
-                  <a 
-                    href="https://facebook.com" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center hover:bg-secondary/90 transition-smooth"
-                  >
-                    <Facebook className="h-5 w-5" />
-                  </a>
-                  <a 
-                    href="https://wa.me/6281234567890" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="w-12 h-12 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center hover:bg-secondary/90 transition-smooth"
-                  >
-                    <MessageCircle className="h-5 w-5" />
-                  </a>
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    id="consent"
+                    name="consent"
+                    checked={form.consent}
+                    onChange={(e) => setForm({...form, consent: e.target.checked})}
+                    required
+                    className="mt-1 w-4 h-4 rounded border-input text-secondary focus:ring-2 focus:ring-secondary"
+                  />
+                  <label htmlFor="consent" className="text-sm text-muted-foreground">
+                    Saya menyetujui penggunaan data ini untuk keperluan komunikasi sesuai kebijakan privasi.
+                  </label>
                 </div>
-              </div>
 
-              {/* Map Embed */}
-              <div className="mt-8 rounded-lg overflow-hidden shadow-green-md">
-                <iframe
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613!3d-6.2087634!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5d2e764b12d%3A0x3d2ad6e1e0e9bcc8!2sJakarta!5e0!3m2!1sen!2sid!4v1234567890"
-                  width="100%"
-                  height="300"
-                  style={{ border: 0 }}
-                  allowFullScreen
-                  loading="lazy"
-                  referrerPolicy="no-referrer-when-downgrade"
-                  title="PETHOFAR Location"
-                ></iframe>
-              </div>
-            </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full px-6 py-4 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 transition-smooth font-semibold text-lg"
+                >
+                  {loading ? "Mengirim..." : "Kirim Pesan"}
+                </button>
 
-            {/* Right Column: Contact Form */}
-            <div>
-              <div className="bg-card rounded-lg p-8 shadow-green-md">
-                <h2 className="text-3xl font-bold mb-6">Kirim Pesan</h2>
-                
-                {/* PHP-ready contact form */}
-                <form action="/submit.php" method="POST" encType="multipart/form-data" className="space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium mb-2">
-                      Nama Lengkap <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      name="name"
-                      required
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
-                      placeholder="Masukkan nama lengkap"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium mb-2">
-                      Email <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      required
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
-                      placeholder="nama@email.com"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="subject" className="block text-sm font-medium mb-2">
-                      Subjek <span className="text-destructive">*</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="subject"
-                      name="subject"
-                      required
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
-                      placeholder="Topik pesan Anda"
-                    />
-                  </div>
-
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium mb-2">
-                      Pesan <span className="text-destructive">*</span>
-                    </label>
-                    <textarea
-                      id="message"
-                      name="message"
-                      rows={6}
-                      required
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary"
-                      placeholder="Tulis pesan Anda di sini..."
-                    ></textarea>
-                  </div>
-
-                  <div>
-                    <label htmlFor="attachment" className="block text-sm font-medium mb-2">
-                      Lampiran (Opsional)
-                    </label>
-                    <input
-                      type="file"
-                      id="attachment"
-                      name="attachment"
-                      accept="image/*,.pdf,.doc,.docx"
-                      className="w-full px-4 py-3 rounded-lg border border-input bg-background focus:outline-none focus:ring-2 focus:ring-secondary file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-secondary file:text-secondary-foreground file:cursor-pointer"
-                    />
-                    <p className="text-xs text-muted-foreground mt-2">
-                      Format: JPG, PNG, PDF, DOC (Max 5MB)
-                    </p>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <input
-                      type="checkbox"
-                      id="consent"
-                      name="consent"
-                      required
-                      className="mt-1 w-4 h-4 rounded border-input text-secondary focus:ring-2 focus:ring-secondary"
-                    />
-                    <label htmlFor="consent" className="text-sm text-muted-foreground">
-                      Saya setuju bahwa data yang saya berikan akan digunakan untuk merespons pertanyaan saya sesuai dengan kebijakan privasi.
-                    </label>
-                  </div>
-
-                  <button
-                    type="submit"
-                    className="w-full px-6 py-4 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 transition-smooth font-semibold text-lg"
-                  >
-                    Kirim Pesan
-                  </button>
-                </form>
-                {/* PHP will access $_POST['nama'], $_POST['email'], etc. */}
-              </div>
+                {/* Response message */}
+                {responseMsg && (
+                  <p className={`mt-4 text-sm ${responseMsg.toLowerCase().includes("berhasil") ? "text-green-600" : "text-red-600"}`}>
+                    {responseMsg}
+                  </p>
+                )}
+              </form>
             </div>
           </div>
 
           {/* FAQ Section */}
           <div className="max-w-4xl mx-auto">
             <h2 className="text-3xl font-bold text-center mb-12">Pertanyaan yang Sering Diajukan (FAQ)</h2>
-            
             <div className="space-y-4">
               {faqs.map((faq, index) => (
                 <div key={index} className="bg-card rounded-lg shadow-green overflow-hidden">

@@ -13,6 +13,8 @@ import Discussions from "./pages/Discussions";
 import Contact from "./pages/Contact";
 import SearchResults from "./pages/SearchResults";
 import NotFound from "./pages/NotFound";
+import ScrollToTop from "./components/ui/scroll-top";
+import CultivationDetail from "./pages/CultivationDetail";
 
 const queryClient = new QueryClient();
 
@@ -22,6 +24,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+         <ScrollToTop /> 
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/plants" element={<PlantsListing />} />
@@ -29,9 +32,7 @@ const App = () => (
           <Route path="/articles" element={<Articles />} />
           <Route path="/articles/detail/:id" element={<ArticleDetail />} />
           <Route path="/cultivation" element={<Cultivation />} />
-          <Route path="/cultivation/detail/:id" element={<PlantDetail />} />
-          <Route path="/discussions" element={<Discussions />} />
-          <Route path="/discussions/detail/:id" element={<PlantDetail />} />
+          <Route path="/cultivation/detail/:id" element={<CultivationDetail />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/search" element={<SearchResults />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}

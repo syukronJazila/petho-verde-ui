@@ -14,7 +14,7 @@ const Header = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="text-2xl font-bold text-primary-foreground hover:text-secondary transition-smooth">
+          <Link to="/" className="text-2xl font-bold text-primary-foreground hover:text-secondary transition-smooth font-nicomoji">
             PETHOFAR
           </Link>
 
@@ -29,33 +29,15 @@ const Header = () => {
               Beranda
             </Link>
 
-            {/* Plants Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setIsPlantsDropdownOpen(true)}
-              onMouseLeave={() => setIsPlantsDropdownOpen(false)}
+            {/* Plants Link */}
+            <Link 
+              to="/plants" 
+               className={`text-primary-foreground hover:text-secondary transition-smooth ${
+                isActive('/plants') ? 'text-secondary font-semibold' : ''
+              }`}
             >
-              <button className="flex items-center text-primary-foreground hover:text-secondary transition-smooth">
-                Tanaman
-                <ChevronDown className="ml-1 h-4 w-4" />
-              </button>
-              {isPlantsDropdownOpen && (
-                <div className="absolute top-full left-0 mt-2 w-48 bg-card shadow-green-lg rounded-lg py-2 z-50">
-                  <Link
-                    to="/plants"
-                    className="block px-4 py-2 text-card-foreground hover:bg-muted transition-smooth"
-                  >
-                    Semua Tanaman
-                  </Link>
-                  <Link
-                    to="/plants/detail/1"
-                    className="block px-4 py-2 text-card-foreground hover:bg-muted transition-smooth"
-                  >
-                    Detail Tanaman
-                  </Link>
-                </div>
-              )}
-            </div>
+              Tanaman
+            </Link>
 
             <Link
               to="/cultivation"
@@ -73,15 +55,6 @@ const Header = () => {
               }`}
             >
               Artikel
-            </Link>
-
-            <Link
-              to="/discussions"
-              className={`text-primary-foreground hover:text-secondary transition-smooth ${
-                isActive('/discussions') ? 'text-secondary font-semibold' : ''
-              }`}
-            >
-              Diskusi
             </Link>
 
             <Link

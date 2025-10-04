@@ -1,58 +1,40 @@
-import { Link } from 'react-router-dom';
-import { Star } from 'lucide-react';
+import { Link } from "react-router-dom";
+import { ArrowRight } from "lucide-react";
 
 interface PlantCardProps {
   id: number;
-  name: string;
-  latinName: string;
+  nama: string;
+  namaLatin: string;
   image: string;
-  badge?: string;
-  benefit: string;
-  rating?: number;
+  manfaat: string;
 }
 
-const PlantCard = ({ id, name, latinName, image, badge, benefit, rating = 4.5 }: PlantCardProps) => {
+const PlantCard = ({ id, nama, namaLatin, image, manfaat }: PlantCardProps) => {
   return (
-    <div className="bg-card rounded-lg overflow-hidden shadow-green hover:shadow-green-md transition-smooth group">
-      <div className="relative overflow-hidden h-48">
-        <img 
-          src={image} 
-          alt={name}
-          className="w-full h-full object-cover group-hover:scale-110 transition-smooth"
+    <div
+      className="bg-white rounded-xl overflow-hidden shadow-md transition-all duration-300 
+                 hover:shadow-xl hover:-translate-y-2 transform cursor-pointer group"
+    >
+      <div className="overflow-hidden">
+        <img
+          src={image}
+          alt={nama}
+          className="w-full h-40 object-cover transition-transform duration-500 group-hover:scale-105"
         />
-        {badge && (
-          <span className="absolute top-2 right-2 bg-secondary text-secondary-foreground text-xs px-2 py-1 rounded-full font-medium">
-            {badge}
-          </span>
-        )}
       </div>
-      <div className="p-4">
-        <h3 className="text-lg font-semibold text-card-foreground mb-1">{name}</h3>
-        <p className="text-sm text-muted-foreground italic mb-2">{latinName}</p>
-        
-        {rating && (
-          <div className="flex items-center gap-1 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                className={`h-4 w-4 ${
-                  i < Math.floor(rating) 
-                    ? 'fill-secondary text-secondary' 
-                    : 'text-gray-300'
-                }`}
-              />
-            ))}
-            <span className="text-sm text-muted-foreground ml-1">{rating}</span>
-          </div>
-        )}
-        
-        <p className="text-sm text-card-foreground/80 mb-4 line-clamp-2">{benefit}</p>
-        
-        <Link 
+
+      <div className="p-5">
+        <h3 className="font-bold text-lg text-[#18221B] mb-1">{nama}</h3>
+        <p className="text-sm text-gray-500 italic mb-2">{namaLatin}</p>
+        <p className="text-gray-600 text-sm mb-4 line-clamp-2">{manfaat}</p>
+
+        <Link
           to={`/plants/detail/${id}`}
-          className="inline-block w-full text-center px-4 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/90 transition-smooth font-medium"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary text-secondary-foreground 
+                     font-medium text-sm transition-all duration-300 hover:bg-secondary/90 shadow-sm hover:shadow-md"
         >
           Lihat Detail
+          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
         </Link>
       </div>
     </div>
