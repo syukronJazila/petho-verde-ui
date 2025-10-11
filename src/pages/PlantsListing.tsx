@@ -20,8 +20,7 @@ const PlantsListing = () => {
   useEffect(() => {
     const fetchPlants = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/tanamanList.php`); // ganti path sesuai API-mu
-        const apiUrl = "https://herbal-ajie.free.nf/pethofar/tanamanList.php";
+        const res = await fetch(`${BASE_URL}/tanamanList.php`);
         const data = await res.json();
         setAllPlants(data.data); // diasumsikan API mengembalikan array tanaman
 
