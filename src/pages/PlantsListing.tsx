@@ -3,16 +3,7 @@ import { Search, Filter } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import PlantCard from "@/components/PlantCard";
-
-// contoh data dummy sementara
-import aloeImage from "@/assets/plant-aloe.jpg";
-import turmericImage from "@/assets/plant-turmeric.jpg";
-import gingerImage from "@/assets/plant-ginger.jpg";
-import lavenderImage from "@/assets/plant-lavender.jpg";
-import mintImage from "@/assets/plant-mint.jpg";
-import chamomileImage from "@/assets/plant-chamomile.jpg";
-import basilImage from "@/assets/plant-basil.jpg";
-import rosemaryImage from "@/assets/plant-rosemary.jpg";
+import { BASE_URL } from "@/utils/config";
 
 const PlantsListing = () => {
   const [allPlants, setAllPlants] = useState<any[]>([]);
@@ -28,9 +19,9 @@ const PlantsListing = () => {
   useEffect(() => {
     const fetchPlants = async () => {
       try {
-        const res = await fetch("http://localhost/pethofar/tanamanList.php"); // ganti path sesuai API-mu
+        const res = await fetch(`${BASE_URL}/tanamanList.php`); // ganti path sesuai API-mu
         const data = await res.json();
-        setAllPlants(data); // diasumsikan API mengembalikan array tanaman
+        setAllPlants(data.data); // diasumsikan API mengembalikan array tanaman
 
         console.log(data);
       } catch (error) {

@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Droplet, Sun, Wind, Calendar, AlertCircle } from "lucide-react";
+import { BASE_URL } from "@/utils/config";
 
 const PlantDetail = () => {
   const { id } = useParams();
@@ -16,7 +17,7 @@ const PlantDetail = () => {
     const fetchPlant = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch(`http://localhost/pethofar/tanamanDetail.php?id=${id}`);
+        const res = await fetch(`${BASE_URL}/tanamanDetail.php?id=${id}`);
         if (!res.ok) {
           const errData = await res.json();
           throw new Error(errData.message || "Gagal mengambil data tanaman");
@@ -128,7 +129,7 @@ const PlantDetail = () => {
           {plant.deskripsi && (
             <div className="bg-card rounded-lg p-8 shadow-sm mb-10">
               <h2 className="text-2xl font-bold mb-4">Tentang {plant.nama}</h2>
-              <p className="text-card-foreground/80 leading-relaxed">{plant.deskripsi}</p>
+              <p className="text-card-foreground/80 leading-relaxed text-justify">{plant.deskripsi}</p>
             </div>
           )}
 

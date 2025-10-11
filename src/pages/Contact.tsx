@@ -2,6 +2,7 @@ import { ChevronDown, ChevronUp } from 'lucide-react';
 import { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { BASE_URL } from "@/utils/config";
 
 const Contact = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -53,7 +54,7 @@ const Contact = () => {
     if (form.consent) formData.append("consent", "1");
 
     try {
-      const res = await fetch("http://localhost/pethofar/submitKontak.php", {
+      const res = await fetch(`${BASE_URL}/submitKontak.php`, {
         method: "POST",
         body: formData,
       });

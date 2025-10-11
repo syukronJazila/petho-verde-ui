@@ -5,6 +5,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import PlantCard from '@/components/PlantCard';
 import heroImage from '@/assets/hero-bg.png';
+import { BASE_URL } from "@/utils/config";
 
 const Index = () => {
   const [popularPlants, setPopularPlants] = useState<any[]>([]);
@@ -16,7 +17,7 @@ const Index = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await fetch("http://localhost/pethofar/beranda.php");
+        const res = await fetch(`${BASE_URL}/beranda.php`);
         const data = await res.json();
 
         if (data.error) {

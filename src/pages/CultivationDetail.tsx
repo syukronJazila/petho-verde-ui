@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Droplet, Leaf, Sun, Bug, Shovel, FlaskConical, Calendar } from "lucide-react";
+import { BASE_URL } from "@/utils/config";
 
 const CultivationDetail = () => {
   const { id } = useParams();
@@ -11,7 +12,7 @@ const CultivationDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`http://localhost/pethofar/budidayaDetail.php?id=${id}`)
+    fetch(`${BASE_URL}/budidayaDetail.php?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (!data.error) setCultivation(data);
@@ -91,38 +92,38 @@ const CultivationDetail = () => {
               <Leaf className="w-5 h-5 text-secondary" />
               Ringkasan Budidaya
             </h2>
-            <p className="text-card-foreground/80">{cultivation.kutipan}</p>
+            <p className="text-card-foreground/80 text-justify">{cultivation.kutipan}</p>
           </div>
 
           {/* Detail Budidaya */}
           <div className="space-y-8">
             <Section
-              icon={<Shovel className="w-5 h-5 text-secondary" />}
+              icon={<Shovel className="w-5 h-5 text-secondary text-justify" />}
               title="Cara Menanam"
-              content={cultivation.caraTanam}
+              content={cultivation.cara_tanam}
             />
             <Section
-              icon={<Leaf className="w-5 h-5 text-secondary" />}
+              icon={<Leaf className="w-5 h-5 text-secondary text-justify" />}
               title="Perawatan"
               content={cultivation.perawatan}
             />
             <Section
-              icon={<FlaskConical className="w-5 h-5 text-secondary" />}
+              icon={<FlaskConical className="w-5 h-5 text-secondary text-justify" />}
               title="Pemupukan"
               content={cultivation.pupuk}
             />
             <Section
-              icon={<Droplet className="w-5 h-5 text-secondary" />}
+              icon={<Droplet className="w-5 h-5 text-secondary text-justify" />}
               title="Penyiraman"
               content={cultivation.penyiraman}
             />
             <Section
-              icon={<Bug className="w-5 h-5 text-secondary" />}
+              icon={<Bug className="w-5 h-5 text-secondary text-justify" />}
               title="Hama dan Pencegahan"
               content={cultivation.hama}
             />
             <Section
-              icon={<Calendar className="w-5 h-5 text-secondary" />}
+              icon={<Calendar className="w-5 h-5 text-secondary text-justify" />}
               title="Waktu Panen"
               content={cultivation.waktu_tanam}
             />

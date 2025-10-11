@@ -4,6 +4,7 @@ import { Search, Filter } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import CultivationCard from "@/components/CultivationCard";
+import { BASE_URL } from "@/utils/config";
 
 const ITEMS_PER_PAGE = 4;
 
@@ -19,7 +20,7 @@ const Cultivation = () => {
   useEffect(() => {
       const fetchBudidaya = async () => {
       try {
-        const res = await fetch("http://localhost/pethofar/budidayaList.php"); 
+        const res = await fetch(`${BASE_URL}/budidayaList.php`); 
         const data = await res.json();
         setGuides(data);
         setFilteredGuides(data);

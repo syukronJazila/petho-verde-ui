@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Search, Calendar, Tag, TrendingUp } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { BASE_URL } from "@/utils/config";
 
 const Articles = () => {
   const [articles, setArticles] = useState([]);
@@ -19,7 +20,7 @@ const Articles = () => {
   useEffect(() => {
      const fetchArtikel = async () => {
       try {
-        const res = await fetch("http://localhost/pethofar/artikelList.php"); // ganti path sesuai API-mu
+        const res = await fetch(`${BASE_URL}/artikelList.php`); // ganti path sesuai API-mu
         const data = await res.json();
         setArticles(data);
         setFilteredArticles(data);
@@ -48,7 +49,6 @@ const Articles = () => {
       filtered = filtered.filter(
         (a) =>
           a.judul.toLowerCase().includes(q) ||
-          a.kutipan.toLowerCase().includes(q) ||
           a.author.toLowerCase().includes(q)
       );
     }

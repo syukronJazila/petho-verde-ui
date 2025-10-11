@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Calendar, User, Clock, Tag } from 'lucide-react';
 import Header from '@/components/Header';   
 import Footer from '@/components/Footer';
+import { BASE_URL } from "@/utils/config";
 
 const ArticleDetail = () => {
   const { id } = useParams();
@@ -15,7 +16,7 @@ const ArticleDetail = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`http://localhost/pethofar/artikelDetail.php?id=${id}`);
+        const res = await fetch(`${BASE_URL}/artikelDetail.php?id=${id}`);
         if (!res.ok) {
           const errData = await res.json();
           throw new Error(errData.message || "Gagal mengambil data artikel");

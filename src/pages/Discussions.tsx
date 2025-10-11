@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Search, MessageSquare, TrendingUp, Users, BookOpen } from 'lucide-react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { BASE_URL } from "@/utils/config";
 
 const Discussions = () => {
   const categories = [

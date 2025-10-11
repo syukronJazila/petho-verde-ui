@@ -9,7 +9,6 @@ import PlantDetail from "./pages/PlantDetail";
 import Articles from "./pages/Articles";
 import ArticleDetail from "./pages/ArticleDetail";
 import Cultivation from "./pages/Cultivation";
-import Discussions from "./pages/Discussions";
 import Contact from "./pages/Contact";
 import SearchResults from "./pages/SearchResults";
 import NotFound from "./pages/NotFound";
