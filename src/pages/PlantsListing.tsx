@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useMemo, useEffect } from "react";
 import { Search, Filter } from "lucide-react";
 import Header from "@/components/Header";

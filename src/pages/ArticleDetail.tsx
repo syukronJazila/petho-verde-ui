@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Link, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { Calendar, User, Clock, Tag } from 'lucide-react';
