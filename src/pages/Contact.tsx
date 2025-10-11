@@ -54,7 +54,7 @@ const Contact = () => {
     if (form.consent) formData.append("consent", "1");
 
     try {
-      const res = await fetch(`${BASE_URL}/submitKontak.php`, {
+      const res = await fetch(`${BASE_URL}submitKontak.php`, {
         method: "POST",
         body: formData,
       });

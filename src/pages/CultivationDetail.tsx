@@ -13,7 +13,7 @@ const CultivationDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    fetch(`${BASE_URL}/budidayaDetail.php?id=${id}`)
+    fetch(`${BASE_URL}budidayaDetail.php?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (!data.error) setCultivation(data);

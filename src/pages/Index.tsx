@@ -18,7 +18,7 @@ const Index = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const res = await fetch(`${BASE_URL}/beranda.php`);
+        const res = await fetch(`${BASE_URL}beranda.php`);
         const data = await res.json();
 
         if (data.error) {

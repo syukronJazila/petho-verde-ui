@@ -20,7 +20,7 @@ const Articles = () => {
   useEffect(() => {
      const fetchArtikel = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/artikelList.php`); // ganti path sesuai API-mu
+        const res = await fetch(`${BASE_URL}artikelList.php`); // ganti path sesuai API-mu
         const data = await res.json();
         setArticles(data);
         setFilteredArticles(data);

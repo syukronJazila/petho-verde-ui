@@ -18,7 +18,7 @@ const PlantDetail = () => {
     const fetchPlant = async () => {
       try {
         setIsLoading(true);
-        const res = await fetch(`${BASE_URL}/tanamanDetail.php?id=${id}`);
+        const res = await fetch(`${BASE_URL}tanamanDetail.php?id=${id}`);
         if (!res.ok) {
           const errData = await res.json();
           throw new Error(errData.message || "Gagal mengambil data tanaman");

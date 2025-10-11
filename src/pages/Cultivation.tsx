@@ -21,7 +21,7 @@ const Cultivation = () => {
   useEffect(() => {
       const fetchBudidaya = async () => {
       try {
-        const res = await fetch(`${BASE_URL}/budidayaList.php`); 
+        const res = await fetch(`${BASE_URL}budidayaList.php`); 
         const data = await res.json();
         setGuides(data);
         setFilteredGuides(data);

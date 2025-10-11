@@ -17,7 +17,7 @@ const ArticleDetail = () => {
       setLoading(true);
       setError(null);
       try {
-        const res = await fetch(`${BASE_URL}/artikelDetail.php?id=${id}`);
+        const res = await fetch(`${BASE_URL}artikelDetail.php?id=${id}`);
         if (!res.ok) {
           const errData = await res.json();
           throw new Error(errData.message || "Gagal mengambil data artikel");
