@@ -157,7 +157,7 @@ const PlantDetail = () => {
               Ingin tahu cara menanam dan merawat tanaman ini dengan benar?
             </p>
             <Link
-              to={`/plants/cultivation/`}
+              to={`/cultivation`}
               className="inline-block px-6 py-3 bg-secondary text-secondary-foreground rounded-lg font-semibold hover:bg-secondary/90 transition-smooth"
             >
               Lihat Panduan Budidaya →

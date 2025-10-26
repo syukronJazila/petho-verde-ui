@@ -1,73 +1,87 @@
-# Welcome to your Lovable project
+# 🪴 PETHOFAR — Website Informasi Tanaman Obat
 
-## Project info
+## 🌱 Deskripsi Proyek
+**PETHOFAR** adalah website informasi tanaman obat yang terdiri dari dua bagian utama:
+- **Halaman User** — berisi informasi seputar tanaman obat, artikel, dan panduan budidaya.  
+- **Halaman Admin** — digunakan oleh admin untuk mengelola konten seperti daftar tanaman, artikel, budidaya, dan pesan kontak.
 
-**URL**: https://lovable.dev/projects/713e40d4-0bce-4f87-880b-7c48cda207da
+Website ini dikembangkan menggunakan **React + TypeScript + Vite**, dengan sistem routing yang memisahkan halaman pengguna (`/`) dan halaman admin (`/admin/...`).
 
-## How can I edit this code?
+---
 
-There are several ways of editing your application.
+## 🧩 Fitur Utama
 
-**Use Lovable**
+### 👤 Halaman User
+- Melihat daftar tanaman obat lengkap beserta detailnya  
+- Membaca artikel dan panduan budidaya  
+- Mencari tanaman atau artikel berdasarkan kata kunci  
+- Mengirim pesan melalui halaman kontak  
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/713e40d4-0bce-4f87-880b-7c48cda207da) and start prompting.
+### 🔐 Halaman Admin
+- Login sistem aman menggunakan token  
+- CRUD data tanaman, budidaya, dan artikel  
+- Mengelola pesan kontak pengguna  
+- Pengaturan user admin dan preferensi  
 
-Changes made via Lovable will be committed automatically to this repo.
+---
 
-**Use your preferred IDE**
+## ⚙️ Teknologi yang Digunakan
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+| Kategori | Teknologi |
+|-----------|------------|
+| Frontend Framework | React + Vite + TypeScript |
+| Styling | Tailwind CSS + shadcn/ui |
+| Routing | React Router v6 |
+| Form & Validasi | React Hook Form + Zod |
+| State Management | TanStack Query |
+| Backend (API) | PHP (REST API) |
+| Database | MySQL |
+| Hosting | InfinityFree |
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+---
 
-Follow these steps:
+## 🚀 Cara Menjalankan Proyek (Local)
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+# 1. Clone repository
+git clone https://github.com/username/pethofar.git
+cd pethofar
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# 2. Install dependencies
+npm install
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# 3. Jalankan server development
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+# 4. Buka di browser
+Melalui link yang muncul di terminal
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🔒 Autentikasi Admin
 
-**Use GitHub Codespaces**
+- Login melalui halaman: **`/admin`**
+- Setelah login berhasil, **token disimpan di `localStorage`**
+- Hanya pengguna dengan **token valid** yang bisa mengakses **`/admin/*`**
+- Jika belum login → otomatis **diarahkan ke halaman login**
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+---
 
-## What technologies are used for this project?
+## 🖼️ Dokumentasi & Aset
 
-This project is built with:
+📂 Semua dokumentasi dan aset pendukung disimpan di **Google Drive**:  
+👉 [**PETHOFAR Project Drive**](#) _(ganti dengan link Drive kamu)_
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+**Isi dokumentasi mencakup:**
+- 🎨 Desain UI & palet warna  
+- 🔄 Flowchart & ERD database  
+- 🌿 Gambar tanaman dan ikon  
+- 📘 Panduan pengguna dan admin  
 
-## How can I deploy this project?
+---
 
-Simply open [Lovable](https://lovable.dev/projects/713e40d4-0bce-4f87-880b-7c48cda207da) and click on Share -> Publish.
+## 👨‍💻 Kontributor
 
-## Can I connect a custom domain to my Lovable project?
+**Nama Developer:** Ajie  
+**Peran:** Fullstack Developer  
+**Deskripsi:** Bertanggung jawab atas pengembangan frontend, backend API, serta deployment ke server hosting.
 
-Yes, you can!
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)

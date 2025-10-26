@@ -107,13 +107,13 @@ const Header = () => {
             >
               Artikel
             </Link>
-            <Link
+            {/* <Link
               to="/discussions"
               className="block py-2 text-primary-foreground hover:text-secondary transition-smooth"
               onClick={() => setIsMenuOpen(false)}
             >
               Diskusi
-            </Link>
+            </Link> */}
             <Link
               to="/contact"
               className="block py-2 text-primary-foreground hover:text-secondary transition-smooth"
