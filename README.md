@@ -41,8 +41,8 @@ Website ini dikembangkan menggunakan **React + TypeScript + Vite**, dengan siste
 
 1️⃣ **Clone repository**  
 ```bash
-git clone https://github.com/username/pethofar.git](https://github.com/syukronJazila/petho-verde-ui.git
-cd pethofar
+git clone https://github.com/syukronJazila/petho-verde-ui.git
+cd petho-verde-ui
 ```
 
 2️⃣ **Install Node.js**  
