@@ -1,4 +1,4 @@
-# 🪴 PETHOFAR — Website Informasi Tanaman Obat
+# 🪴 PETHOFAR — Website Informasi Tanaman Herbal
 
 ## 🌱 Deskripsi Proyek
 **PETHOFAR** adalah website informasi tanaman obat yang terdiri dari dua bagian utama:
@@ -31,30 +31,78 @@ Website ini dikembangkan menggunakan **React + TypeScript + Vite**, dengan siste
 |-----------|------------|
 | Frontend Framework | React + Vite + TypeScript |
 | Styling | Tailwind CSS + shadcn/ui |
-| Routing | React Router v6 |
-| Form & Validasi | React Hook Form + Zod |
-| State Management | TanStack Query |
-| Backend (API) | PHP (REST API) |
+| Backend (API) | PHP |
 | Database | MySQL |
 | Hosting | InfinityFree |
 
 ---
 
-## 🚀 Cara Menjalankan Proyek (Local)
+## 🚀 Cara Menjalankan Proyek (Lokal)
 
+1️⃣ **Clone repository**  
 ```bash
-# 1. Clone repository
 git clone https://github.com/username/pethofar.git
 cd pethofar
+```
 
-# 2. Install dependencies
+2️⃣ **Install Node.js**  
+Download dan install Node.js Versi 20 di:  
+👉 [https://nodejs.org/en/download](https://nodejs.org/en/download)
+
+Tutorial video:  
+🎥 [https://youtu.be/8FjrJ51fyqo](https://youtu.be/8FjrJ51fyqo)
+
+**INGAT VERSI 20!!!**
+
+Cek apakah sudah terinstall:
+```bash
+node -v
+npm -v
+```
+
+3️⃣ **Install dependencies frontend**  
+```bash
 npm install
+```
 
-# 3. Jalankan server development
+4️⃣ **Jalankan server development**  
+```bash
 npm run dev
+```
 
-# 4. Buka di browser
-Melalui link yang muncul di terminal
+Lalu buka link yang muncul di terminal (biasanya `http://localhost:5173`).
+
+5️⃣ **Install dan Setup MySQL**  
+Download dan install XAMPP di:  
+👉 [https://www.apachefriends.org/download.html](https://www.apachefriends.org/download.html)
+
+Tutorial video:  
+🎥 [https://youtu.be/J6tOC6Z7Vm4](https://youtu.be/J6tOC6Z7Vm4)
+
+Setelah install:
+- Jalankan Apache dan MySQL dari XAMPP Control Panel.
+- Buka phpMyAdmin di browser:  
+  👉 [http://localhost/phpmyadmin](http://localhost/phpmyadmin)
+
+6️⃣ **Import Database**  
+Di phpMyAdmin, klik **Import**.  
+Pilih file `pethofar.sql` dari folder proyek (download dari repository).  
+Klik **Go**.
+
+7️⃣ **Setup Backend PHP**  
+Download folder `pethofar` dari repository — folder ini berisi semua file backend berbasis PHP.  
+Buka folder instalasi XAMPP di `C:\xampp\htdocs\`.  
+Pindahkan folder `pethofar` ke dalam direktori tersebut, sehingga strukturnya menjadi:
+
+```bash
+C:\xampp\htdocs\pethofar\*.php
+```
+
+Coba akses di browser:  
+[http://localhost/pethofar/beranda.php](http://localhost/pethofar/beranda.php)  
+Jika muncul data atau tidak error, berarti backend sudah jalan ✅
+
+---
 
 ## 🔒 Autentikasi Admin
 
@@ -68,20 +116,18 @@ Melalui link yang muncul di terminal
 ## 🖼️ Dokumentasi & Aset
 
 📂 Semua dokumentasi dan aset pendukung disimpan di **Google Drive**:  
-👉 [**PETHOFAR Project Drive**](#) _(ganti dengan link Drive kamu)_
-
-**Isi dokumentasi mencakup:**
-- 🎨 Desain UI & palet warna  
-- 🔄 Flowchart & ERD database  
-- 🌿 Gambar tanaman dan ikon  
-- 📘 Panduan pengguna dan admin  
+👉 [**PETHOFAR Project Drive**](https://drive.google.com/drive/folders/1knX0ZUjsAyXFzFGF_1aAdLLS-NtCGaqN?usp=sharing)
 
 ---
 
-## 👨‍💻 Kontributor
+## 👨‍💻 Developer
 
 **Nama Developer:** Ajie  
 **Peran:** Fullstack Developer  
 **Deskripsi:** Bertanggung jawab atas pengembangan frontend, backend API, serta deployment ke server hosting.
 
+---
 
+## 💚 Penutup
+
+Dibuat dengan semangat hijau untuk menjaga kearifan lokal dan kekayaan tanaman obat Indonesia.

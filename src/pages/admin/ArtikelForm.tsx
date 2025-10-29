@@ -13,16 +13,19 @@ import JoditEditor from "jodit-react";
 import DOMPurify from "dompurify";
 import { BASE_URL } from "@/utils/config";
 
-
 export default function ArtikelForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
   const { toast } = useToast();
 
+  // 🔹 Ambil user yang login dari localStorage
+  const currentUser = JSON.parse(localStorage.getItem("user") || "{}");
+
   const [formData, setFormData] = useState({
     judul: "",
-    author: "",
+    author_id: currentUser?.id || "", // untuk dikirim ke server
+    author_name: currentUser?.nama || "", // hanya untuk ditampilkan
     tanggal: "",
     waktu_baca: "",
     kategori: "",
@@ -37,37 +40,46 @@ export default function ArtikelForm() {
 
   // === Ambil data kalau edit ===
   useEffect(() => {
-    if (isEdit) {
-      fetch(`${BASE_URL}artikelDetail.php?id=${id}`)
-        .then((res) => res.json())
-        .then((data) => {
-          if (data.error) {
-            toast({ title: "Error", description: data.message });
-            return;
-          }
+    if (!isEdit) return;
 
-          const imageUrl = data.image?.startsWith("http")
-            ? data.image
-            : `${BASE_URL}uploads/${data.image}`;
+    let isMounted = true; // 👈 cegah update state setelah unmount
+    fetch(`${BASE_URL}artikelDetail.php?id=${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (!isMounted) return;
 
-          setFormData({
-            judul: data.judul || "",
-            author: data.author || "",
-            tanggal: data.tanggal || "",
-            waktu_baca: data.waktu_baca || "",
-            kategori: data.kategori || "",
-            image: imageUrl || "",
-            konten: data.konten || "",
-            tags: data.tags
-          });
-        })
-        .catch((err) => {
-          toast({ title: "Error", description: "Gagal memuat artikel" })
-          console.log(err)
+        if (data.error) {
+          toast({ title: "Error", description: data.message });
+          return;
         }
-      );
-    }
-  }, [id, isEdit, toast]);
+
+        const imageUrl = data.image?.startsWith("http")
+          ? data.image
+          : `${BASE_URL}uploads/${data.image}`;
+
+        setFormData({
+          judul: data.judul || "",
+          author_id: data.author || currentUser.id,
+          author_name: currentUser.nama,
+          tanggal: data.tanggal || "",
+          waktu_baca: data.waktu_baca || "",
+          kategori: data.kategori || "",
+          image: imageUrl || "",
+          konten: data.konten || "",
+          tags: Array.isArray(data.tags)
+            ? data.tags
+            : JSON.parse(data.tags || "[]"),
+        });
+      })
+      .catch(() => {
+        toast({ title: "Error", description: "Gagal memuat artikel" });
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, [id]); // 👈 dependensi cukup id saja
+
 
   // === Image ===
   const handleImageChange = (file: File | null, preview: string) => {
@@ -102,14 +114,14 @@ export default function ArtikelForm() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!formData.judul || !formData.author || !formData.tanggal || !formData.kategori || !formData.konten) {
+    if (!formData.judul || !formData.tanggal || !formData.kategori || !formData.konten) {
       toast({ title: "Gagal", description: "Semua field wajib diisi" });
       return;
     }
 
     const submitData = new FormData();
     submitData.append("judul", formData.judul);
-    submitData.append("author", formData.author);
+    submitData.append("author_id", formData.author_id); // kirim id user
     submitData.append("tanggal", formData.tanggal);
     submitData.append("waktu_baca", formData.waktu_baca);
     submitData.append("kategori", formData.kategori);
@@ -123,7 +135,6 @@ export default function ArtikelForm() {
 
     try {
       const res = await fetch(endpoint, { method: "POST", body: submitData });
-      console.log(res)
       const result = await res.json();
 
       toast({
@@ -132,8 +143,8 @@ export default function ArtikelForm() {
       });
 
       if (!result.error) setTimeout(() => navigate("/admin/artikel"), 1200);
-    } catch(err) {
-      console.log(err)
+    } catch (err) {
+      console.log(err);
       toast({ title: "Error", description: "Gagal mengirim data ke server" });
     }
   };
@@ -193,10 +204,9 @@ export default function ArtikelForm() {
               <div>
                 <Label>Author *</Label>
                 <Input
-                  value={formData.author}
-                  onChange={(e) => setFormData({ ...formData, author: e.target.value })}
-                  placeholder="Nama penulis"
-                  required
+                  value={formData.author_name}
+                  readOnly // 🔒 tidak bisa diubah
+                  className="bg-gray-100 text-gray-600 cursor-not-allowed"
                 />
               </div>
               <div>
@@ -216,7 +226,7 @@ export default function ArtikelForm() {
                 <Input
                   value={formData.kategori}
                   onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
-                  placeholder="Misalnya: Tips, Panduan"
+                  placeholder="Misalnya: Resep"
                   required
                 />
               </div>
@@ -279,19 +289,12 @@ export default function ArtikelForm() {
                   uploader: { insertImageAsBase64URI: true },
                   toolbarAdaptive: false,
                   placeholder: "Tulis isi artikel di sini...",
-                  // Setting paste biar bisa copy-paste dengan aman
-                  askBeforePasteHTML: false,
-                  askBeforePasteFromWord: false,
-                  defaultActionOnPaste: "insert_clear_html",
-                  pasteHTMLActionList: [
-                    { value: "insert_as_text", text: "Tempel sebagai teks biasa" },
-                    { value: "insert_as_html", text: "Tempel sebagai HTML" },
-                    { value: "insert_clear_html", text: "Tempel & bersihkan format" },
-                  ],
-                  enableDragAndDropFileToEditor: true
                 }}
-                onBlur={(newContent) => setFormData({ ...formData, konten: newContent })}
+                onBlur={(newContent) =>
+                  setFormData((prev) => ({ ...prev, konten: newContent }))
+                }
               />
+
             </div>
           </CardContent>
         </Card>

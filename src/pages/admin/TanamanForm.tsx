@@ -9,19 +9,20 @@ import { ArrowLeft, Save } from "lucide-react";
 import { ImageUpload } from "@/components/ImageUpload";
 import { ArrayEditor } from "@/components/ArrayEditor";
 import { toast } from "sonner";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BASE_URL } from "@/utils/config";
-
 
 export default function TanamanForm() {
   const navigate = useNavigate();
   const { id } = useParams();
   const isEdit = !!id;
 
+  const [kategoriList, setKategoriList] = useState<{ id: string; nama: string }[]>([]);
   const [formData, setFormData] = useState({
     nama: "",
     nama_latin: "",
     image: "",
-    kategori: "",
+    kategori_id: "",
     fakta_singkat: { air: "", cahaya: "", iklim: "", panen: "" },
     deskripsi: "",
     manfaat: [] as string[],
@@ -30,9 +31,31 @@ export default function TanamanForm() {
 
   const [imageFile, setImageFile] = useState<File | null>(null);
 
+  // 1) fetch kategori sekali
+  useEffect(() => {
+    let cancelled = false;
+    fetch(`${BASE_URL}kategoriList.php`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (cancelled) return;
+        if (!data.error && Array.isArray(data.kategori)) {
+          setKategoriList(data.kategori.map((k: any) => ({ ...k, id: k.id?.toString?.() ?? String(k.id) })));
+        } else {
+          toast.error("Gagal memuat daftar kategori");
+        }
+      })
+      .catch(() => !cancelled && toast.error("Gagal memuat kategori dari server"));
+    
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+  
+  // 2) fetch detail hanya setelah kategoriList tersedia
   useEffect(() => {
     if (!isEdit) return;
-
+    if (kategoriList.length === 0) return; // tunggu daftar kategori
+  
     fetch(`${BASE_URL}tanamanDetail.php?id=${id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -40,59 +63,61 @@ export default function TanamanForm() {
           toast.error(data.message || "Gagal memuat data tanaman");
           return;
         }
-
-        const imageUrl = data.image?.startsWith("http")
-          ? data.image
-          : `${BASE_URL}${data.image}`;
-
-          console.log(imageUrl)
-
+      
+        const imageUrl = data.image?.startsWith("http") ? data.image : `${BASE_URL}${data.image}`;
+        const kategoriIdStr = data.kategori_id ? data.kategori_id.toString() : "";
+        const validKategori = kategoriList.some((k) => k.id === kategoriIdStr);
+      
         setFormData({
           nama: data.nama || "",
           nama_latin: data.nama_latin || "",
           image: imageUrl || "",
-          kategori: data.kategori || "",
-          fakta_singkat:
-            data.fakta_singkat || { air: "", cahaya: "", iklim: "", panen: "" },
+          kategori_id: validKategori ? kategoriIdStr : "",
+          fakta_singkat: data.fakta_singkat || { air: "", cahaya: "", iklim: "", panen: "" },
           deskripsi: data.deskripsi || "",
           manfaat: data.manfaat || [],
           referensi: data.referensi || [],
         });
       })
       .catch(() => toast.error("Gagal mengambil data tanaman dari server"));
-  }, [isEdit, id]);
+  }, [isEdit, id, kategoriList]);
+
+
 
   const handleImageChange = (file: File | null, preview: string) => {
     setImageFile(file);
     setFormData((prev) => ({ ...prev, image: preview }));
   };
 
+  // 🔹 Simpan / Update
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    if (!formData.nama.trim() || !formData.nama_latin.trim()) {
-      toast.error("Nama dan nama latin wajib diisi");
+    // ✅ Validasi wajib
+    if (!formData.nama.trim() || !formData.nama_latin.trim() || !formData.kategori_id) {
+      toast.error("Nama, Nama Latin, dan Kategori wajib diisi");
       return;
     }
+
     const submitData = new FormData();
     submitData.append("nama", formData.nama.trim());
     submitData.append("nama_latin", formData.nama_latin.trim());
-    submitData.append("kategori", formData.kategori.trim());
-    submitData.append("fakta_singkat", JSON.stringify(formData.fakta_singkat));
+    submitData.append("kategori_id", formData.kategori_id);
+    submitData.append("_fakta_singkat", JSON.stringify(formData.fakta_singkat));
     submitData.append("deskripsi", formData.deskripsi.trim());
     formData.manfaat.forEach((item) => submitData.append("manfaat[]", item));
     formData.referensi.forEach((item) => submitData.append("referensi[]", item));
-    
+
     if (imageFile) {
-      submitData.append("image", imageFile); // file baru
+      submitData.append("image", imageFile);
     } else {
-      submitData.append("image", formData.image); // kirim URL lama
+      submitData.append("image", formData.image);
     }
 
     const endpoint = isEdit
       ? `${BASE_URL}tanamanUpdate.php?id=${id}`
       : `${BASE_URL}tanamanCreate.php`;
-  
+
     try {
       const res = await fetch(endpoint, { method: "POST", body: submitData });
       const result = await res.json();
@@ -137,23 +162,17 @@ export default function TanamanForm() {
             {/* Nama & Latin */}
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label>
-                  Nama Tanaman <span className="text-destructive">*</span>
-                </Label>
+                <Label>Nama Tanaman <span className="text-destructive">*</span></Label>
                 <Input
                   value={formData.nama}
-                  onChange={(e) =>
-                    setFormData({ ...formData, nama: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
                   placeholder="contoh: Lidah Buaya"
                   required
                 />
               </div>
 
               <div className="space-y-2">
-                <Label>
-                  Nama Latin <span className="text-destructive">*</span>
-                </Label>
+                <Label>Nama Latin <span className="text-destructive">*</span></Label>
                 <Input
                   value={formData.nama_latin}
                   onChange={(e) =>
@@ -165,18 +184,34 @@ export default function TanamanForm() {
               </div>
             </div>
 
-            {/* Kategori */}
+            {/* Kategori Dropdown */}
             <div className="space-y-2">
-              <Label>Kategori</Label>
-              <Input
-                value={formData.kategori}
-                onChange={(e) =>
-                  setFormData({ ...formData, kategori: e.target.value })
-                }
-                placeholder="contoh: Sukulen, Rimpang, Herba"
-                required
-              />
+              <Label>
+                Kategori <span className="text-destructive">*</span>
+              </Label>
+              <Select
+                value={formData.kategori_id}
+                onValueChange={(val) => setFormData({ ...formData, kategori_id: val })}
+              >
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Pilih kategori" />
+                </SelectTrigger>
+                <SelectContent>
+                  {kategoriList.length > 0 ? (
+                    kategoriList.map((kategori) => (
+                      <SelectItem key={kategori.id} value={kategori.id.toString()}>
+                        {kategori.nama}
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem disabled value="none">
+                      Memuat kategori...
+                    </SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
             </div>
+
 
             {/* Upload Gambar */}
             <ImageUpload
@@ -237,9 +272,7 @@ export default function TanamanForm() {
             <ArrayEditor
               label="Referensi"
               value={formData.referensi}
-              onChange={(value) =>
-                setFormData({ ...formData, referensi: value })
-              }
+              onChange={(value) => setFormData({ ...formData, referensi: value })}
               placeholder="Ketik sumber referensi dan tekan Enter"
             />
 
