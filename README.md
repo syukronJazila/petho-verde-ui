@@ -70,7 +70,7 @@ npm install
 npm run dev
 ```
 
-Lalu buka link yang muncul di terminal (biasanya `http://localhost:5173`).
+Lalu buka link yang muncul di terminal (biasanya `http://localhost:8080`).
 
 5️⃣ **Install dan Setup MySQL**  
 Download dan install XAMPP di:  
